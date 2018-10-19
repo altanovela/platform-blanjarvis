@@ -151,8 +151,6 @@ function DoShellExecute(body, command){
     var ticket = body.response_url.substr(body.response_url.lastIndexOf('/') + 1);
 	var usernm = body.user_name;
 	
-	console.log("== EXE " + command);
-	
 	// Trigger Exec
 	exec(command, function (error, stdout, stderr) {
         if(stdout){
