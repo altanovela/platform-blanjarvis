@@ -22,6 +22,57 @@ app.listen(DEFAULT_PORT, () => {
 });
 
 /**
+ * GIT Pull - Pull code from git repository
+ */ 
+app.post('/blanjarvis/git/pull', (req, res) => {
+    var prm = ExtractParameter(true, req.body);
+    var cmd = 'ssh -p 22 vmuser@' + prm[0] + ' \'git -C "/home/vmuser/mp2git/" pull\'';
+    DoShellExecute(req.body, cmd);
+    
+    // return the result
+    var tckt = req.body.response_url.substr(req.body.response_url.lastIndexOf('/') + 1);
+    var comd = '/blanjarvis/git/pull ' + req.body.text;
+    
+    // Prepare Response
+    res.setHeader('Content-Type', 'application/json');
+    res.send(PostSyncResponse(req.body.user_name, comd, tckt));
+});
+
+/**
+ * GIT Status - Status code from git repository
+ */ 
+app.post('/blanjarvis/git/status', (req, res) => {
+    var prm = ExtractParameter(true, req.body);
+    var cmd = 'ssh -p 22 vmuser@' + prm[0] + ' \'git -C "/home/vmuser/mp2git/" status\'';
+    DoShellExecute(req.body, cmd);
+    
+    // return the result
+    var tckt = req.body.response_url.substr(req.body.response_url.lastIndexOf('/') + 1);
+    var comd = '/blanjarvis/git/status ' + req.body.text;
+    
+    // Prepare Response
+    res.setHeader('Content-Type', 'application/json');
+    res.send(PostSyncResponse(req.body.user_name, comd, tckt));
+});
+
+/**
+ * GIT Checkout - Checkout code from git repository
+ */ 
+app.post('/blanjarvis/git/checkout', (req, res) => {
+    var prm = ExtractParameter(false, req.body);
+    var cmd = 'ssh -p 22 vmuser@' + prm[0] + ' \'git -C "/home/vmuser/mp2git/" checkout '+ prm[1] +'\'';
+    DoShellExecute(req.body, cmd);
+    
+    // return the result
+    var tckt = req.body.response_url.substr(req.body.response_url.lastIndexOf('/') + 1);
+    var comd = '/blanjarvis/git/checkout ' + req.body.text;
+    
+    // Prepare Response
+    res.setHeader('Content-Type', 'application/json');
+    res.send(PostSyncResponse(req.body.user_name, comd, tckt));
+});
+
+/**
  * JAR - Compile Jar (iapi)
  */ 
 app.post('/blanjarvis/build/iapi', (req, res) => {
