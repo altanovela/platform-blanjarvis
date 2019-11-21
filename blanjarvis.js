@@ -23,23 +23,19 @@ app.listen(DEFAULT_PORT, () => {
 
 // --- UNDER CONSTRUCTION ---
 function getSlackToken(u, p){
+    console.log(u, p);
     var auth = 'Basic ' + Buffer.from(u + ':' + p).toString('base64');
     var resn = request('POST', 'https://10.11.12.30/api/v2/tokens/', {
         headers: {
-            'Authorization': auth
+            'Authorization': auth,
+            'Content-Type': 'application/json'
         },
         json: {
             scope: "write"
         }
-    },
-    function (error, response, body) {
-        if (error) {
-          return console.error('error:', error);
-        }
-        console.log("ok");
     });
-    console.log(resn.getBody());
-    return resn.getBody().token;
+    console.log(JSON.parse(resn.getBody()));
+    return JSON.parse(resn.getBody()).token;
 }
 
 function sendReplyFromSubmission(payload){
@@ -53,10 +49,11 @@ function sendReplyFromSubmission(payload){
 }
 
 function showSlackDialog(tid){
+    console.log(tid);
     var resn = request('POST', 'https://slack.com/api/dialog.open', {
         headers: {
             'Content-Type' : 'application/json; charset=utf-8',
-            'Authorization' : 'Bearer xoxb-3890988748-470104240467-v8SxXFsZaXTf7dc76oiwjGOc'
+            'Authorization' : 'Bearer xoxp-3890988748-13675250546-831009859378-dfba34236154b61e88ec833ab2e36928'
         },
         json: {
             pretty : 1,
@@ -146,12 +143,8 @@ function showSlackDialog(tid){
                 ]
             }
         }
-    },
-    function (error, response, body) {
-        if (error) {
-          return console.error('ERROR_showSlackDialog: ', error);
-        }
     });
+    console.log(JSON.parse(resn.getBody()));
 }
 app.post('/blanjarvis/release', (req, res) => {
     showSlackDialog(req.body.trigger_id);
