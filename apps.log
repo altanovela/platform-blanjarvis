@@ -1,5 +1,0 @@
-Blanjarvis is up on http 19893
-== EXE ssh -p 22 vmuser@10.11.17.41 '/home/vmuser/publish/dev/iapi.sh '
-(node:31339) DeprecationWarning: exec: use child_process.execFile instead
-Shell Execution Error : 
-null 'ok'

@@ -21,6 +21,118 @@ app.listen(DEFAULT_PORT, () => {
     console.log('Blanjarvis is up on http ' + DEFAULT_PORT);
 });
 
+// --- UNDER CONSTRUCTION ---
+function call(tid){
+    console.log(tid);
+    var resn = request({
+        method: "POST",
+        uri:  "https://slack.com/api/dialog.open",
+        headers: {
+            'Content-Type' : 'application/json; charset=utf-8',
+            'Authorization' : 'Bearer xoxb-3890988748-470104240467-htLUlPJZUsDFFQTqzu7lgeT0'
+        },
+        json: true,
+        body: {
+            pretty : 1,
+            trigger_id : tid,
+            dialog :{
+                callback_id : "mp2dt-"+tid,
+                title : "MP2 Deploy Tools (BETA)",
+                submit_label : "Deploy",
+                elements : [
+                   {
+                        type : "text",
+                        label : "Username",
+                        name : "awx_username"
+                    },
+                    {
+                        type : "text",
+                        label : "Password",
+                        name : "awx_password"
+                    },
+                    {
+                        type : "select",
+                        label : "Task",
+                        name : "awx_workflow_template_id",
+                        options : [
+                            {
+                                value : "220",
+                                label : "[PROD - WORKFLOW] Dubbo Member"
+                            },
+                            {
+                                value : "219",
+                                label : "[PROD - WORKFLOW] Dubbo Platform"
+                            },
+                            {
+                                value : "221",
+                                label : "[PROD - WORKFLOW] Dubbo Product"
+                            },
+                            {
+                                value : "218",
+                                label : "[PROD - WORKFLOW] Dubbo Trade"
+                            },
+                            {
+                                value : "202",
+                                label : "[PROD - WORKFLOW] Nginx Config Deployment"
+                            },
+                            {
+                                value : "213",
+                                label : "[PROD - WORKFLOW] Web Admin"
+                            },
+                            {
+                                value : "211",
+                                label : "[PROD - WORKFLOW] Web Mainsite"
+                            },
+                            {
+                                value : "212",
+                                label : "[PROD - WORKFLOW] Web Member"
+                            },
+                            {
+                                value : "216",
+                                label : "[PROD - WORKFLOW] Web Mobile"
+                            },
+                            {
+                                value : "217",
+                                label : "[PROD - WORKFLOW] Web Mobile Apps API"
+                            },
+                            {
+                                value : "214",
+                                label : "[PROD - WORKFLOW] Web Product"
+                            },
+                            {
+                                value : "223",
+                                label : "[PROD - WORKFLOW] Web Seller"
+                            },
+                            {
+                                value : "224",
+                                label : "[PROD - WORKFLOW] Web Seller API"
+                            },
+                            {
+                                value : "225",
+                                label : "[PROD - WORKFLOW] Web Seller Apps API"
+                            },
+                            {
+                                value : "215",
+                                label : "[PROD - WORKFLOW] Web Trade"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    });
+}
+app.post('/blanjarvis/release', (req, res) => {
+    console.log(req.body);
+    call(req.body.trigger_id);
+    res.send('<@' + req.body.user_name + "> initial deploy.");
+});
+app.post('/blanjarvis/release/reply', (req, res) => {
+    console.log(req.body);
+    res.send();
+});
+// --- UNDER CONSTRUCTION ---
+
 /**
  * GIT Pull - Pull code from git repository
  */ 
