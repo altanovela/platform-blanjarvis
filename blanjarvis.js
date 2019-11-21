@@ -7,7 +7,7 @@ const express = require('express');
 const exec = require('exec');
 const app = express();
 
-var request = require('request');
+var request = require('sync-request');
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); 
@@ -22,29 +22,43 @@ app.listen(DEFAULT_PORT, () => {
 });
 
 // --- UNDER CONSTRUCTION ---
-function call2(payload){
+function getSlackToken(u, p){
+    var auth = 'Basic ' + Buffer.from(u + ':' + p).toString('base64');
+    var resn = request('POST', 'https://10.11.12.30/api/v2/tokens/', {
+        headers: {
+            'Authorization': auth
+        },
+        json: {
+            scope: "write"
+        }
+    },
+    function (error, response, body) {
+        if (error) {
+          return console.error('error:', error);
+        }
+        console.log("ok");
+    });
+    console.log(resn.getBody());
+    return resn.getBody().token;
+}
+
+function sendReplyFromSubmission(payload){
     var task = payload.submission.awx_workflow_template_id;
     var labl = task.substring(task.indexOf("@") + 1, task.length);
-    var resn = request({
-        method: "POST",
-        uri:  payload.response_url,
-        json: true,
-        body: {
+    var resn = request('POST', payload.response_url, {
+        json: {
             text : '<@' + payload.user.name + '> is calling *' + labl + '*'
         }
     });
 }
 
-function call(tid){
-    var resn = request({
-        method: "POST",
-        uri:  "https://slack.com/api/dialog.open",
+function showSlackDialog(tid){
+    var resn = request('POST', 'https://slack.com/api/dialog.open', {
         headers: {
             'Content-Type' : 'application/json; charset=utf-8',
-            'Authorization' : 'Bearer xoxb-3890988748-470104240467-KXoGJSkdszMLBaz8P9iZWYBH'
+            'Authorization' : 'Bearer xoxb-3890988748-470104240467-v8SxXFsZaXTf7dc76oiwjGOc'
         },
-        json: true,
-        body: {
+        json: {
             pretty : 1,
             trigger_id : tid,
             dialog :{
@@ -66,7 +80,7 @@ function call(tid){
                         type : "select",
                         label : "Password",
                         name : "awx_workflow_template_id",
-                        option_groups : [
+                        options : [
                             {
                                 value : "220@[PROD - WORKFLOW] Dubbo Member",
                                 label : "[PROD - WORKFLOW] Dubbo Member"
@@ -135,18 +149,18 @@ function call(tid){
     },
     function (error, response, body) {
         if (error) {
-          return console.error('upload failed:', error);
+          return console.error('ERROR_showSlackDialog: ', error);
         }
-        console.log('Upload successful!  Server responded with:', body);
     });
 }
 app.post('/blanjarvis/release', (req, res) => {
-    call(req.body.trigger_id);
+    showSlackDialog(req.body.trigger_id);
     res.send();
 });
 app.post('/blanjarvis/release/reply', (req, res) => {
     payload = JSON.parse(req.body.payload);
-    call2(payload);
+    console.log(getSlackToken(payload.submission.awx_username,payload.submission.awx_password));
+    sendReplyFromSubmission(payload);
     res.send();
 });
 // --- UNDER CONSTRUCTION ---
