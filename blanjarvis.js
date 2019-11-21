@@ -22,14 +22,26 @@ app.listen(DEFAULT_PORT, () => {
 });
 
 // --- UNDER CONSTRUCTION ---
+function call2(payload){
+    var task = payload.submission.awx_workflow_template_id;
+    var labl = task.substring(task.indexOf("@") + 1, task.length);
+    var resn = request({
+        method: "POST",
+        uri:  payload.response_url,
+        json: true,
+        body: {
+            text : '<@' + payload.user.name + '> is calling *' + labl + '*'
+        }
+    });
+}
+
 function call(tid){
-    console.log(tid);
     var resn = request({
         method: "POST",
         uri:  "https://slack.com/api/dialog.open",
         headers: {
             'Content-Type' : 'application/json; charset=utf-8',
-            'Authorization' : 'Bearer xoxb-3890988748-470104240467-htLUlPJZUsDFFQTqzu7lgeT0'
+            'Authorization' : 'Bearer xoxb-3890988748-470104240467-KXoGJSkdszMLBaz8P9iZWYBH'
         },
         json: true,
         body: {
@@ -52,67 +64,67 @@ function call(tid){
                     },
                     {
                         type : "select",
-                        label : "Task",
+                        label : "Password",
                         name : "awx_workflow_template_id",
-                        options : [
+                        option_groups : [
                             {
-                                value : "220",
+                                value : "220@[PROD - WORKFLOW] Dubbo Member",
                                 label : "[PROD - WORKFLOW] Dubbo Member"
                             },
                             {
-                                value : "219",
+                                value : "219@[PROD - WORKFLOW] Dubbo Platform",
                                 label : "[PROD - WORKFLOW] Dubbo Platform"
                             },
                             {
-                                value : "221",
+                                value : "221@[PROD - WORKFLOW] Dubbo Product",
                                 label : "[PROD - WORKFLOW] Dubbo Product"
                             },
                             {
-                                value : "218",
+                                value : "218@[PROD - WORKFLOW] Dubbo Trade",
                                 label : "[PROD - WORKFLOW] Dubbo Trade"
                             },
                             {
-                                value : "202",
+                                value : "202@[PROD - WORKFLOW] Nginx Config Deployment",
                                 label : "[PROD - WORKFLOW] Nginx Config Deployment"
                             },
                             {
-                                value : "213",
+                                value : "213@[PROD - WORKFLOW] Web Admin",
                                 label : "[PROD - WORKFLOW] Web Admin"
                             },
                             {
-                                value : "211",
+                                value : "211@[PROD - WORKFLOW] Web Mainsite",
                                 label : "[PROD - WORKFLOW] Web Mainsite"
                             },
                             {
-                                value : "212",
+                                value : "212@[PROD - WORKFLOW] Web Member",
                                 label : "[PROD - WORKFLOW] Web Member"
                             },
                             {
-                                value : "216",
+                                value : "216@[PROD - WORKFLOW] Web Mobile",
                                 label : "[PROD - WORKFLOW] Web Mobile"
                             },
                             {
-                                value : "217",
+                                value : "217@[PROD - WORKFLOW] Web Mobile Apps API",
                                 label : "[PROD - WORKFLOW] Web Mobile Apps API"
                             },
                             {
-                                value : "214",
+                                value : "214@[PROD - WORKFLOW] Web Product",
                                 label : "[PROD - WORKFLOW] Web Product"
                             },
                             {
-                                value : "223",
+                                value : "223@[PROD - WORKFLOW] Web Seller",
                                 label : "[PROD - WORKFLOW] Web Seller"
                             },
                             {
-                                value : "224",
+                                value : "224@[PROD - WORKFLOW] Web Seller API",
                                 label : "[PROD - WORKFLOW] Web Seller API"
                             },
                             {
-                                value : "225",
+                                value : "225@[PROD - WORKFLOW] Web Seller Apps API",
                                 label : "[PROD - WORKFLOW] Web Seller Apps API"
                             },
                             {
-                                value : "215",
+                                value : "215@[PROD - WORKFLOW] Web Trade",
                                 label : "[PROD - WORKFLOW] Web Trade"
                             }
                         ]
@@ -120,15 +132,21 @@ function call(tid){
                 ]
             }
         }
+    },
+    function (error, response, body) {
+        if (error) {
+          return console.error('upload failed:', error);
+        }
+        console.log('Upload successful!  Server responded with:', body);
     });
 }
 app.post('/blanjarvis/release', (req, res) => {
-    console.log(req.body);
     call(req.body.trigger_id);
-    res.send('<@' + req.body.user_name + "> initial deploy.");
+    res.send();
 });
 app.post('/blanjarvis/release/reply', (req, res) => {
-    console.log(req.body);
+    payload = JSON.parse(req.body.payload);
+    call2(payload);
     res.send();
 });
 // --- UNDER CONSTRUCTION ---
