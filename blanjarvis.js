@@ -75,7 +75,7 @@ function showSlackDialog(tid){
             trigger_id : tid,
             dialog :{
                 callback_id : "mp2dt-"+tid,
-                title : "mp2 Deploy Tools (BETA)",
+                title : "Blanja Deploy Tools BETA",
                 submit_label : "Deploy",
                 elements : [
                    {
@@ -94,8 +94,8 @@ function showSlackDialog(tid){
                         name : "awx_workflow_template_id",
                         options : [
                             {
-                                value : "220@[PROD - WORKFLOW] Dubbo Member",
-                                label : "[PROD - WORKFLOW] Dubbo Member"
+                                value : "202@[PROD - WORKFLOW] Nginx Config Deployment",
+                                label : "[PROD - WORKFLOW] Nginx Config Deployment"
                             },
                             {
                                 value : "219@[PROD - WORKFLOW] Dubbo Platform",
@@ -106,12 +106,12 @@ function showSlackDialog(tid){
                                 label : "[PROD - WORKFLOW] Dubbo Product"
                             },
                             {
-                                value : "218@[PROD - WORKFLOW] Dubbo Trade",
-                                label : "[PROD - WORKFLOW] Dubbo Trade"
+                                value : "220@[PROD - WORKFLOW] Dubbo Member",
+                                label : "[PROD - WORKFLOW] Dubbo Member"
                             },
                             {
-                                value : "202@[PROD - WORKFLOW] Nginx Config Deployment",
-                                label : "[PROD - WORKFLOW] Nginx Config Deployment"
+                                value : "218@[PROD - WORKFLOW] Dubbo Trade",
+                                label : "[PROD - WORKFLOW] Dubbo Trade"
                             },
                             {
                                 value : "213@[PROD - WORKFLOW] Web Admin",
@@ -126,16 +126,20 @@ function showSlackDialog(tid){
                                 label : "[PROD - WORKFLOW] Web Member"
                             },
                             {
+                                value : "214@[PROD - WORKFLOW] Web Product",
+                                label : "[PROD - WORKFLOW] Web Product"
+                            },
+                            {
+                                value : "215@[PROD - WORKFLOW] Web Trade",
+                                label : "[PROD - WORKFLOW] Web Trade"
+                            },
+                            {
                                 value : "216@[PROD - WORKFLOW] Web Mobile",
                                 label : "[PROD - WORKFLOW] Web Mobile"
                             },
                             {
                                 value : "217@[PROD - WORKFLOW] Web Mobile Apps API",
                                 label : "[PROD - WORKFLOW] Web Mobile Apps API"
-                            },
-                            {
-                                value : "214@[PROD - WORKFLOW] Web Product",
-                                label : "[PROD - WORKFLOW] Web Product"
                             },
                             {
                                 value : "223@[PROD - WORKFLOW] Web Seller",
@@ -148,10 +152,6 @@ function showSlackDialog(tid){
                             {
                                 value : "225@[PROD - WORKFLOW] Web Seller Apps API",
                                 label : "[PROD - WORKFLOW] Web Seller Apps API"
-                            },
-                            {
-                                value : "215@[PROD - WORKFLOW] Web Trade",
-                                label : "[PROD - WORKFLOW] Web Trade"
                             }
                         ]
                     }
