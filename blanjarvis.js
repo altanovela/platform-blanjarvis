@@ -169,11 +169,12 @@ app.post('/blanjarvis/release/reply', (req, res) => {
     var reqs = JSON.parse(req.body.payload);
     var user = reqs.submission.awx_username;
     var pass = reqs.submission.awx_password;
-    var task = reqs.submission.awx_password;
+    var task = reqs.submission.awx_workflow_template_id;
+    var tsid = task.substring(task.indexOf("@") + 1, task.length);
     var tokn = getAwxToken(user, pass);
 
     var stat = 'failed'
-    if(callAwxTask(tokn, task)){
+    if(callAwxTask(tokn, tsid)){
         stat = 'success'
     }
     sendReplyFromSubmission(payload, stat);
