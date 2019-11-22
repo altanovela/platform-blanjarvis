@@ -22,7 +22,7 @@ app.listen(DEFAULT_PORT, () => {
 });
 
 // --- UNDER CONSTRUCTION ---
-function getSlackToken(u, p){
+function getAwxToken(u, p){
     var auth = 'Basic ' + Buffer.from(u + ':' + p).toString('base64');
     var resn = request('POST', 'https://10.11.12.30/api/v2/tokens/', {
         headers: {
@@ -42,12 +42,15 @@ function getSlackToken(u, p){
     return resn.getBody().token;
 }
 
+function callAwxTask(token, taskid){
+
+}
 function sendReplyFromSubmission(payload){
     var task = payload.submission.awx_workflow_template_id;
     var labl = task.substring(task.indexOf("@") + 1, task.length);
     var resn = request('POST', payload.response_url, {
         json: {
-            text : '<@' + payload.user.name + '> is calling *' + labl + '*'
+            text : '<@' + payload.user.name + '> is calling *' + labl + '* using *' + payload.submission.awx_workflow_username + '*access'
         }
     });
 }
@@ -56,14 +59,14 @@ function showSlackDialog(tid){
     var resn = request('POST', 'https://slack.com/api/dialog.open', {
         headers: {
             'Content-Type' : 'application/json; charset=utf-8',
-            'Authorization' : 'Bearer xoxb-3890988748-470104240467-v8SxXFsZaXTf7dc76oiwjGOc'
+            'Authorization' : 'Bearer xxxx'
         },
         json: {
             pretty : 1,
             trigger_id : tid,
             dialog :{
                 callback_id : "mp2dt-"+tid,
-                title : "MP2 Deploy Tools (BETA)",
+                title : "mp2 Deploy Tools (BETA)",
                 submit_label : "Deploy",
                 elements : [
                    {
@@ -159,7 +162,8 @@ app.post('/blanjarvis/release', (req, res) => {
 });
 app.post('/blanjarvis/release/reply', (req, res) => {
     payload = JSON.parse(req.body.payload);
-    console.log(getSlackToken(payload.submission.awx_username,payload.submission.awx_password));
+    var awxtoken = getAwxToken(payload.submission.awx_username,payload.submission.awx_password);
+    console.log(awxtoken);
     sendReplyFromSubmission(payload);
     res.send();
 });
