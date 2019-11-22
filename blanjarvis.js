@@ -23,7 +23,6 @@ app.listen(DEFAULT_PORT, () => {
 
 // --- UNDER CONSTRUCTION ---
 function getAwxToken(u, p){
-    console.log(u, p);
     var auth = 'Basic ' + Buffer.from(u + ':' + p).toString('base64');
     var resn = request('POST', 'https://10.11.12.30/api/v2/tokens/', {
         headers: {
@@ -34,19 +33,32 @@ function getAwxToken(u, p){
             scope: "write"
         }
     });
-    console.log(JSON.parse(resn.getBody()));
-    return JSON.parse(resn.getBody()).token;
+    var json = JSON.parse(resn.getBody());
+    return json.token;
 }
 
 function callAwxTask(token, taskid){
-
+    var auth = 'Bearer ' + token;
+    var resn = request('POST', 'https://10.11.12.30/api/v2/workflow_job_templates/'+taskid+'/launch/', {
+        headers: {
+            'Authorization': auth,
+            'Content-Type': 'application/json'
+        },
+        json: {
+            "ask_limit_on_launch": false,
+            "ask_scm_branch_on_launch": false
+        }
+    });
+    var json = JSON.parse(resn.getBody());
+    return json.workflow_job;
 }
-function sendReplyFromSubmission(payload){
+
+function sendReplyFromSubmission(payload, stat){
     var task = payload.submission.awx_workflow_template_id;
     var labl = task.substring(task.indexOf("@") + 1, task.length);
     var resn = request('POST', payload.response_url, {
         json: {
-            text : '<@' + payload.user.name + '> is calling *' + labl + '* using *' + payload.submission.awx_workflow_username + '*access'
+            text : '<@' + payload.user.name + '> is calling *' + labl + '* using *' + payload.submission.awx_workflow_username + '*access, status : *' + stat + '*'
         }
     });
 }
@@ -154,10 +166,17 @@ app.post('/blanjarvis/release', (req, res) => {
     res.send();
 });
 app.post('/blanjarvis/release/reply', (req, res) => {
-    payload = JSON.parse(req.body.payload);
-    var awxtoken = getAwxToken(payload.submission.awx_username,payload.submission.awx_password);
-    console.log(awxtoken);
-    sendReplyFromSubmission(payload);
+    var reqs = JSON.parse(req.body.payload);
+    var user = reqs.submission.awx_username;
+    var pass = reqs.submission.awx_password;
+    var task = reqs.submission.awx_password;
+    var tokn = getAwxToken(user, pass);
+
+    var stat = 'failed'
+    if(callAwxTask(tokn, task)){
+        stat = 'success'
+    }
+    sendReplyFromSubmission(payload, stat);
     res.send();
 });
 // --- UNDER CONSTRUCTION ---
