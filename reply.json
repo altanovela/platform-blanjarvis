@@ -1,3 +1,0 @@
-{
-  payload: '{"type":"dialog_submission","token":"eWD3tPwkwhoVKIq8FDY27AVj","action_ts":"1574328809.431874","team":{"id":"T03S6V2N0","domain":"metraplasa"},"user":{"id":"U0DKV7CG2","name":"rio.bastian"},"channel":{"id":"CB42AHXL2","name":"ribot"},"submission":{"awx_username":"riobastian","awx_password":"ganteng","awx_workflow_template_id":"221"},"callback_id":"mp2dt-843074660516.3890988748.11140d58c7efcbb51e3f21900413ff66","response_url":"https:\\/\\/hooks.slack.com\\/app\\/T03S6V2N0\\/843536347024\\/OoB5yXkrEWsRtfq4c5CfWaUj","state":""}'
-}

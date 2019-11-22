@@ -177,7 +177,7 @@ app.post('/blanjarvis/release/reply', (req, res) => {
     if(callAwxTask(tokn, tsid)){
         stat = 'success'
     }
-    sendReplyFromSubmission(payload, stat);
+    sendReplyFromSubmission(reqs, stat);
     res.send();
 });
 // --- UNDER CONSTRUCTION ---
