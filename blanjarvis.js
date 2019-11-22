@@ -58,7 +58,8 @@ function sendReplyFromSubmission(payload, stat){
     var labl = task.substring(task.indexOf("@") + 1, task.length);
     var resn = request('POST', payload.response_url, {
         json: {
-            text : '<@' + payload.user.name + '> is calling *' + labl + '* using *' + payload.submission.awx_username + '*access, status : *' + stat + '*'
+            response_type: "in_channel",
+            text : '<@' + payload.user.name + '> is calling *' + labl + '* using *' + payload.submission.awx_username + '* access, status : *' + stat + '*'
         }
     });
 }
