@@ -24,7 +24,7 @@ app.listen(DEFAULT_PORT, () => {
 // --- UNDER CONSTRUCTION ---
 function getAwxToken(u, p){
     var auth = 'Basic ' + Buffer.from(u + ':' + p).toString('base64');
-    var resn = request('POST', 'https://10.11.12.30/api/v2/tokens/', {
+    var resn = request('POST', 'https://awx.blanja.local/api/v2/tokens/', {
         headers: {
             'Authorization': auth,
             'Content-Type': 'application/json'
@@ -39,7 +39,7 @@ function getAwxToken(u, p){
 
 function callAwxTask(token, taskid){
     var auth = 'Bearer ' + token;
-    var resn = request('POST', 'https://10.11.12.30/api/v2/workflow_job_templates/'+taskid+'/launch/', {
+    var resn = request('POST', 'https://awx.blanja.local/api/v2/workflow_job_templates/'+taskid+'/launch/', {
         headers: {
             'Authorization': auth,
             'Content-Type': 'application/json'
