@@ -170,7 +170,7 @@ app.post('/blanjarvis/release/reply', (req, res) => {
     var user = reqs.submission.awx_username;
     var pass = reqs.submission.awx_password;
     var task = reqs.submission.awx_workflow_template_id;
-    var tsid = task.substring(task.indexOf("@") + 1, task.length);
+    var tsid = task.substring(0, task.indexOf("@"));
     var tokn = getAwxToken(user, pass);
 
     var stat = 'failed'
