@@ -70,7 +70,7 @@ function showSlackDialog(tid){
     var resn = request('POST', 'https://slack.com/api/dialog.open', {
         headers: {
             'Content-Type' : 'application/json; charset=utf-8',
-            'Authorization' : 'Bearer xoxb-3890988748-470104240467-vqMn7PiO29JSzq3FSTuQAV6p'
+            'Authorization' : 'Bearer xxxx'
         },
         json: {
             pretty : 1,
