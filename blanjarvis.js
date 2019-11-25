@@ -56,20 +56,21 @@ function callAwxTask(token, taskid){
 function sendReplyFromSubmission(payload, stat){
     var task = payload.submission.awx_workflow_template_id;
     var labl = task.substring(task.indexOf("@") + 1, task.length);
+    var note = '<@' + payload.user.name + '> is calling *' + labl + '* using *' + payload.submission.awx_username + '* access, status : *' + stat + '*';
+    console.log(note);
     var resn = request('POST', payload.response_url, {
         json: {
             response_type: "in_channel",
-            text : '<@' + payload.user.name + '> is calling *' + labl + '* using *' + payload.submission.awx_username + '* access, status : *' + stat + '*'
+            text : note
         }
     });
 }
 
 function showSlackDialog(tid){
-    console.log(tid);
     var resn = request('POST', 'https://slack.com/api/dialog.open', {
         headers: {
             'Content-Type' : 'application/json; charset=utf-8',
-            'Authorization' : 'Bearer xxxx'
+            'Authorization' : 'Bearer xoxb-3890988748-470104240467-vqMn7PiO29JSzq3FSTuQAV6p'
         },
         json: {
             pretty : 1,
@@ -91,7 +92,7 @@ function showSlackDialog(tid){
                     },
                     {
                         type : "select",
-                        label : "Password",
+                        label : "Task",
                         name : "awx_workflow_template_id",
                         options : [
                             {
@@ -160,11 +161,15 @@ function showSlackDialog(tid){
             }
         }
     });
-    console.log(JSON.parse(resn.getBody()));
 }
 app.post('/blanjarvis/release', (req, res) => {
-    showSlackDialog(req.body.trigger_id);
-    res.send();
+    console.log(req.body);
+    if(req.body.channel_name == 'release-process'){
+        showSlackDialog(req.body.trigger_id);
+        res.send();
+    } else {
+        res.send("Oops you can't call /release process here, please go to <#CQ72Y020M|release-process>");
+    }
 });
 app.post('/blanjarvis/release/reply', (req, res) => {
     var reqs = JSON.parse(req.body.payload);
